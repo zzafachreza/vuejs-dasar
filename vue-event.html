@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Aplikasi Vue #1</title>
+
+    <!-- Menyisipkan Vuejs dari CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+
+
+
+    <!-- elemen kontainer untuk aplikasi -->
+    <div id="data">
+        <h1>{{ judul }}</h1>
+        <input type="text" name="name" v-model:value="name">
+        <button  @click="btnClick" @mouseout="hover = false" @mouseover="hover=true">
+        	KLIK YA
+        </button>
+
+        <p v-if="hover">
+        	Anda sedang menyentuh tombolnya
+        </p>
+	 
+    </div>
+    
+    <!-- aplikasi Vue Hello -->
+    <script>
+
+    	var app = new Vue({
+    		el:"#data",
+    		data : {
+    			judul : "EVENT",
+    			name : "Fachreza Maulana",
+    			hover : false
+    		},
+    		methods:{
+    			btnClick:function(){
+    				 alert(`Hi ${this.name}, Kamu sudah mengklik tombolnya`);
+    			}
+    		}
+          
+    	})
+	
+	</script>
+</body>
+</html>

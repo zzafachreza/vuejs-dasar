@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Aplikasi Vue #1</title>
+
+    <!-- Menyisipkan Vuejs dari CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+
+
+
+    <!-- elemen kontainer untuk aplikasi -->
+    <div id="data">
+        <h1>{{ judul }}</h1>
+
+
+        <form @submit.prevent="addTask">
+
+
+        	<input type="hidden" id="key" name="key"  v-model:value="key">
+
+        	<span v-if="fungsi=='addTask'">
+        		<input type="text" placeholder="masukan Kegiatan" v-model:value="newTask" id="task">
+        		<button type="submit" >{{ tombol }} </button>
+        	</span>
+
+        	<span v-else-if="fungsi=='editTask'">
+        		
+        		<input type="text" placeholder="masukan Kegiatan" v-model:value="newTask" id="task">
+        		<button style="background-color: green;color:#FFF" type="submit" >{{ tombol }} </button>
+        	</span>
+
+        </form>
+
+	    <ul>
+	        <li v-for="item,index in todoList">
+	            <s v-if="item.done">
+	                {{ item.task  }}
+	            </s>
+	            <b v-else>
+	                {{ item.task }}
+	            </b>
+	            <!-- {{ item.task }} -->
+
+	            <a @click="deletTask(index)" href="#" >Hapus</a>
+	            <a @click="editTask(index)" href="#" >Edit</a>
+	        </li>
+	    </ul>
+	 
+    </div>
+    
+    <!-- aplikasi Vue Hello -->
+    <script>
+
+    	var app = new Vue({
+    		el:"#data",
+    		data : {
+    			newTask:"",
+    			key:"",
+                todoList:[
+                    {'done':true,task:"belajar vuew js"},
+                    {'done':false,task:"siram tanaman di kebun"},
+                    {'done':false,task:"beli bibit kopi"},
+                ],
+                tombol:"simpan",
+                judul:"Daftar Kegiatan",
+                fungsi : "addTask"
+    		},
+            methods:{
+                addTask:function(){
+
+                	if (this.key !=="") {
+                		// console.log( this.key + this.newTask);
+
+                		this.todoList[this.key].task =  this.newTask;
+
+                		 this.newTask = "";
+
+                		this.tombol="simpan"
+	                	this.judul="Daftar Kegiatann"
+	                	this.fungsi='addTask'
+	                	document.getElementById("task").focus();
+
+
+                	}else{
+
+                	
+                	this.todoList.push({'done':false,'task':this.newTask});
+                    this.newTask = "";
+
+
+                    this.tombol="simpan"
+                	this.judul="Daftar Kegiatann"
+                	this.fungsi='addTask'
+                	document.getElementById("task").focus();
+
+                	}
+                	
+
+                 
+                },
+                deletTask:function(x){
+                	// console.log(x)
+                	this.todoList.splice(x, 1)
+                		// this.newTask = "";
+
+
+                },editTask:function(x){
+                	// console.log(x)
+                	// console.log(this.todoList[x])
+                	this.newTask=this.todoList[x].task;
+                	this.tombol="Edit Task"
+                	this.judul="Melakukan Edit Kegiatan"
+                	this.fungsi='editTask'
+                	this.key = x
+                	document.getElementById("task").focus();
+                	// document.getElementById("key").value=x;
+
+
+
+
+                }
+            }
+    	})
+	
+	</script>
+</body>
+</html>

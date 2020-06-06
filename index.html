@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <title>Aplikasi Vue #1</title>
+  </head>
+  <body>
+ 	<div class="container">
+ 		 <div id="data">
+        
+        <center>
+        	<h1>{{ judul }}</h1>
+        </center>
+
+
+  	<div class="col-sm-9">
+  		      <form @submit.prevent="addTask">
+
+
+        	<input type="hidden" id="key" name="key"  v-model:value="key">
+
+        	<span v-if="fungsi=='addTask'">
+        		<input class="form-control" type="text" placeholder="masukan Kegiatan" v-model:value="newTask" id="task" autocomplete="off">
+<hr>
+        		<button class="btn btn-primary col-sm-4" style="float: right;" type="submit" >{{ tombol }} </button>
+        	</span>
+
+        	<span v-else-if="fungsi=='editTask'">
+        		
+        		<input class="form-control" type="text" placeholder="masukan Kegiatan" v-model:value="newTask" id="task" autocomplete="off">
+
+        		<br>
+        		<select v-model:value="keyDone" class="form-control">
+        			<option value="false">BELUM</option>
+        			<option value="true">SELESAI</option>
+        		</select>
+
+
+        	
+   <hr>     		
+        		<button class="btn btn-success col-sm-4" style="float: right;" type="submit" >{{ tombol }} </button>
+        	</span>
+
+        </form>
+  		
+  	</div>
+        <br>
+        <h4>List Kegiatan</h4>
+
+        <table class="table table-hover table-bordered">
+        	<tr class="bg-info">
+        		<th>Kegiatan</th>
+        		<th>Action</th>
+        	</tr>
+
+        	<tr v-for="item,index in todoList">
+        		<td>
+        			<s v-if="item.done">
+	                {{ item.task  }}
+	            </s>
+	            <b v-else>
+	                {{ item.task }}
+	            </b>
+        		</td>
+        		<td> 
+        			<a class="btn btn-warning" @click="editTask(index)" href="#" >Edit</a>
+        			<a class="btn btn-danger" @click="deletTask(index)" href="#" >Hapus</a>
+	           		 
+        		</td>
+        	<!-- 	<td> {{ item.task  }}</td> -->
+
+        	</tr>
+
+
+        </table>
+
+	 
+    </div>
+ 	</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
+
+
+
+
+    <!-- elemen kontainer untuk aplikasi -->
+  
+    
+    <!-- aplikasi Vue Hello -->
+    <script>
+
+    	var app = new Vue({
+    		el:"#data",
+    		data : {
+    			newTask:"",
+    			key:"",
+    			keyDone:false,
+                todoList:[
+                    {'done':true,task:"belajar vuew js"},
+                    {'done':false,task:"siram tanaman di kebun"},
+                    {'done':false,task:"beli bibit kopi"},
+                ],
+                tombol:"simpan",
+                judul:"Daftar Kegiatan",
+                fungsi : "addTask"
+    		},
+            methods:{
+                addTask:function(){
+
+                	if (this.key !=="") {
+                	 console.log( this.key + this.newTask + this.keyDone);
+
+
+
+                		this.todoList[this.key].task =  this.newTask;
+                		this.todoList[this.key].done =  this.keyDone;
+
+                		 this.newTask = "";
+                		 this.key="";
+
+                		this.tombol="simpan"
+	                	this.judul="Daftar Kegiatan"
+	                	this.fungsi='addTask'
+	                	document.getElementById("task").focus();
+
+
+                	}else{
+
+                	
+                	this.todoList.push({'done':false,'task':this.newTask});
+                    this.newTask = "";
+
+
+                    this.tombol="simpan"
+                	this.judul="Daftar Kegiatann"
+                	this.fungsi='addTask'
+                	document.getElementById("task").focus();
+
+                	}
+                	
+
+                 
+                },
+                deletTask:function(x){
+                	// console.log(x)
+                	this.todoList.splice(x, 1)
+                		// this.newTask = "";
+
+
+                },editTask:function(x){
+                	// console.log(x)
+                	// console.log(this.todoList[x])
+                	this.newTask=this.todoList[x].task;
+                	this.tombol="Edit Task"
+                	this.judul="Melakukan Edit Kegiatan"
+                	this.fungsi='editTask'
+                	this.key = x
+                	document.getElementById("task").focus();
+                	// document.getElementById("key").value=x;
+
+
+
+
+                }
+            }
+    	})
+	
+	</script>
+</body>
+</html>
